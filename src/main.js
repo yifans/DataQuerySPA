@@ -6,6 +6,11 @@ import router from './router'
 
 Vue.config.productionTip = false
 
+// iview
+import iView from 'iview'
+import 'iview/dist/styles/iview.css' // 使用 CSS
+Vue.use(iView)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

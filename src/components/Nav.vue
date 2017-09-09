@@ -1,8 +1,12 @@
 <template>
-  <div>
-    <div v-for="item in items">
-      <router-link :to="item.router">{{item.name}}</router-link>
-    </div>
+  <div id="nav">
+    <Menu mode="horizontal" theme="light">
+      <div class="layout-nav">
+          <MenuItem v-for="item in items" :name=item.router>
+            <router-link :to=item.router>{{item.name}}</router-link>
+          </MenuItem>
+      </div>
+    </Menu>
   </div>
 </template>
 

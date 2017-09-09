@@ -2,7 +2,9 @@
   <div>
     <my-header></my-header>
     <my-nav></my-nav>
-    <router-view></router-view>
+    <div id="layout-body">
+      <router-view></router-view>
+    </div>
     <my-footer></my-footer>
   </div>
 </template>
@@ -25,4 +27,8 @@ export default {
 </script>
 
 <style >
+#layout-body {
+  height: 500px;
+  color: red
+}
 </style>
