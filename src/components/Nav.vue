@@ -1,15 +1,24 @@
 <template>
-<div>
-  <router-link to='/status'>Status</router-link>
-  <router-link to='/historical'>Historical Data</router-link>
-  <router-link to='/analysis'>Data Analysis</router-link>
-  <router-link to='/help'>Help</router-link>
-</div>
+  <div>
+    <div v-for="item in items">
+      <router-link :to="item.router">{{item.name}}</router-link>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'nav'
+  name: 'nav',
+  data: function () {
+    return {
+      items: [
+        { name: 'Status', router: '/status' },
+        { name: 'Historical Data', router: '/historical' },
+        { name: 'Data Analysis', router: '/analysis' },
+        { name: 'Help', router: '/help' }
+      ]
+    }
+  }
 }
 </script>
 
