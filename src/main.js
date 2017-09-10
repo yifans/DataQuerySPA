@@ -10,6 +10,9 @@ Vue.config.productionTip = false
 import iView from 'iview'
 import 'iview/dist/styles/iview.css' // 使用 CSS
 Vue.use(iView)
+// vue-highcharts
+import VueHighcharts from 'vue-highcharts'
+Vue.use(VueHighcharts)
 
 /* eslint-disable no-new */
 new Vue({

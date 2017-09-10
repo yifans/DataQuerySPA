@@ -27,8 +27,4 @@ export default {
 </script>
 
 <style >
-#layout-body {
-  height: 500px;
-  color: red
-}
 </style>
