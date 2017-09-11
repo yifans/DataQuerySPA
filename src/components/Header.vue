@@ -1,5 +1,7 @@
 <template>
-<h1>HLS-II Operation Status</h1>
+  <div class="header">
+    <h1>HLS-II Operation Status</h1>
+  </div>
 </template>
 
 <script>
@@ -9,5 +11,8 @@ export default {
 </script>
 
 <style scoped>
-
+.header {
+  font-size: 2em;
+  text-align: center;
+}
 </style>

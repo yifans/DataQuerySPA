@@ -1,9 +1,9 @@
 <template>
   <div id="nav">
     <Menu mode="horizontal" theme="light">
-      <div class="layout-nav">
-          <MenuItem v-for="item in items" :name=item.router>
-            <router-link :to=item.router>{{item.name}}</router-link>
+      <div id="layout-nav">
+          <MenuItem v-for="item in items" :name="item.router" :key="items.router">
+            <router-link :to="item.router">{{item.name}}</router-link>
           </MenuItem>
       </div>
     </Menu>
@@ -27,4 +27,8 @@ export default {
 </script>
 
 <style>
+#layout-nav {
+  margin: 0 auto;
+  width: 1000px;
+}
 </style>

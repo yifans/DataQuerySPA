@@ -1,13 +1,17 @@
 <template>
-  <p>Copyright Controls Group, Machine Division, NSRL</p>
+  <div class="footer">
+    <footer>Copyright Controls Group, Machine Division, NSRL</footer>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'header'
 }
 </script>
 
-<style scoped>
-
+<style >
+.footer {
+  text-align: center;
+  font-size: 1.5em;
+}
 </style>
