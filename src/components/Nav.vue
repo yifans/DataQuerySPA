@@ -16,7 +16,7 @@ export default {
   data: function () {
     return {
       items: [
-        { name: 'Status', router: '/status' },
+        { name: 'Operation Status', router: '/status' },
         { name: 'Historical Data', router: '/historical' },
         { name: 'Data Analysis', router: '/analysis' },
         { name: 'Alarm', router: '/alarm' },

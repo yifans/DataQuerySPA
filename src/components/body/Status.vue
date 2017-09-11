@@ -3,12 +3,12 @@
     <Row>
       <Col span="16" offset="2">
         <div id="status-chart">
-          <my-chart></my-chart>
+          <my-chart :pvlist='pvlistChart'></my-chart>
         </div>
       </Col>
       <Col span="4">
         <div id="status-table">
-          <my-table :pvlist=pvlist></my-table>
+          <my-table :pvlist='pvlistTable'></my-table>
         </div>
       </Col>
     </Row>
@@ -23,7 +23,11 @@ export default {
   name: 'status',
   data: function () {
     return {
-      pvlist: 'beam'
+      pvlistTable: 'beam',
+      pvlistChart: [
+        'RNG:BEAM:CURR',
+        'RNG:BEAM:LIFE'
+      ]
     }
   },
   components: {

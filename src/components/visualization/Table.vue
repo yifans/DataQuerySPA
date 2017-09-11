@@ -26,7 +26,6 @@ export default {
         {pv: 'beam', status: 200},
         {pv: 'life', status: 50}
       ]
-      console.log(this.pvlist)
       return tmp
     }
   }

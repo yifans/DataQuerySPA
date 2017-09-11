@@ -20,31 +20,32 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
+      redirect: '/status',
       component: Home,
       children: [
         {
           path: '/status',
-          name: 'Status',
+          name: 'Operation Status',
           component: Status
         },
         {
           path: '/help',
-          name: 'Help',
+          name: 'Help Page',
           component: Help
         },
         {
           path: '/historical',
-          name: 'historical',
+          name: 'Historical Data',
           component: Historical
         },
         {
           path: '/analysis',
-          name: 'analysis',
+          name: 'Data Analysis',
           component: Analysis
         },
         {
           path: '/alarm',
-          name: 'alarm',
+          name: 'Alarm',
           component: Alarm
         }
       ]

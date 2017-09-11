@@ -1,86 +1,83 @@
 <template>
   <div class="chart">
-      <highcharts :options="myoptions"></highcharts>
+      <highcharts :options="myOptions" ref="highcharts"></highcharts>
   </div>
 </template>
 
 <script>
-
-var option1 = {
-  title: {
-    text: 'Monthly Average Temperature',
-    x: -20
-  },
-  subtitle: {
-    text: 'Source: WorldClimate.com',
-    x: -20
-  },
-  xAxis: {
-    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ]
-  },
-  yAxis: {
-    title: {
-      text: 'Temperature (°C)'
-    },
-    plotLines: [{
-      value: 0,
-      width: 1,
-      color: '#808080'
-    }]
-  },
-  tooltip: {
-    valueSuffix: '°C'
-  },
-  legend: {
-    layout: 'vertical',
-    align: 'right',
-    verticalAlign: 'middle',
-    borderWidth: 0
-  },
-  series: [{
-    name: 'Tokyo',
-    data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-  }, {
-    name: 'New York',
-    data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
-  }, {
-    name: 'Berlin',
-    data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
-  }, {
-    name: 'London',
-    data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-  }]
-}
+var dateNow = new Date()
+var dateYesterday = new Date(new Date() - 24 * 60 * 60 * 1000)
 
 export default {
   name: 'chart',
   data: function () {
     return {
-      option1
+      option: {
+        yAxis: [],
+        title: {
+          text: ''
+        },
+        series: [],
+        credits: {
+          // enabled:true,                    // 默认值，如果想去掉版权信息，设置为false即可
+          text: 'NSRL@USTC',             // 显示的文字
+          href: 'http://www.nsrl.ustc.edu.cn'
+        },
+        animation: false, // 关闭动画
+        legend: {
+          layout: 'vertical',
+          align: 'right'
+        }
+      }
     }
   },
-  props: [
-    'timerange'
-  ],
+  props: {
+    timeRange: {
+      default: function () {
+        return [dateYesterday, dateNow]
+      }
+    },
+    pvlist: Array
+  },
   computed: {
-    myoptions: function () {
-      return this.option1
+    myOptions: function () {
+      // get URL
+      var urlHead = '/retrieval/data/getData.qw?'
+      for (var x in this.pvlist) {
+        var urlTmp = urlHead + 'pv=' + this.pvlist[x] + '&'
+        this.$http.get(urlTmp).then(
+          response => {
+            var body = response.body
+            var pvName = body[0].meta.name
+            var pvEGU = body[0].meta.EGU
+            var pvValue = body[0].data.map(function (val, index, arr) {
+              return [val['millis'], val['val']]
+            })
+            this.option.series.push({
+              name: pvName,
+              data: pvValue,
+              yAxis: pvName,
+              animation: false
+              // pointInterval: pvValue.length / 5000
+            })
+            this.option.yAxis.push({
+              title: {
+                text: pvEGU
+              },
+              id: pvName
+            })
+            this.option.xAxis = {
+              title: {
+                text: 'Time'
+              },
+              type: 'datetime'
+            }
+          }, response => {
+            // error callback
+        })
+      }
+      return this.option
     }
-  },
-  created: function () {
-    // GET /someUrl
-    // var URL= "/retrieval/data/getData.qw?pv=SR-VA-VG1:ch4:pressure:ai&from=2017-08-25T09:16:39.930Z&to=2017-08-25T10:16:39.930Z&fetchLatestMetadata=true"
-    var URL = '/retrieval/data/getData.qw?pv=RNG:BEAM:CURR'
-    this.$http.get(URL).then(
-      response => {
-        // get body data
-        var body = response.body
-        console.log(body)
-      }, response => {
-      // error callback
-    })
   }
 }
 </script>
