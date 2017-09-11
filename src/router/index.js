@@ -6,6 +6,7 @@ import Status from '@/components/body/Status'
 import Help from '@/components/body/Help'
 import Historical from '@/components/body/Historical'
 import Analysis from '@/components/body/Analysis'
+import Alarm from '@/components/body/Alarm'
 
 Vue.use(Router)
 
@@ -40,6 +41,11 @@ export default new Router({
           path: '/analysis',
           name: 'analysis',
           component: Analysis
+        },
+        {
+          path: '/alarm',
+          name: 'alarm',
+          component: Alarm
         }
       ]
     }

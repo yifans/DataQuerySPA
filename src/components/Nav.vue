@@ -19,6 +19,7 @@ export default {
         { name: 'Status', router: '/status' },
         { name: 'Historical Data', router: '/historical' },
         { name: 'Data Analysis', router: '/analysis' },
+        { name: 'Alarm', router: '/alarm' },
         { name: 'Help', router: '/help' }
       ]
     }

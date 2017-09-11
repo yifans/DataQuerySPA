@@ -13,6 +13,9 @@ Vue.use(iView)
 // vue-highcharts
 import VueHighcharts from 'vue-highcharts'
 Vue.use(VueHighcharts)
+// vue resource
+import VueResource from 'vue-resource'
+Vue.use(VueResource)
 
 /* eslint-disable no-new */
 new Vue({

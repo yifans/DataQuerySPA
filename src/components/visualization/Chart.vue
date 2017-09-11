@@ -68,6 +68,19 @@ export default {
     myoptions: function () {
       return this.option1
     }
+  },
+  created: function () {
+    // GET /someUrl
+    // var URL= "/retrieval/data/getData.qw?pv=SR-VA-VG1:ch4:pressure:ai&from=2017-08-25T09:16:39.930Z&to=2017-08-25T10:16:39.930Z&fetchLatestMetadata=true"
+    var URL = '/retrieval/data/getData.qw?pv=RNG:BEAM:CURR'
+    this.$http.get(URL).then(
+      response => {
+        // get body data
+        var body = response.body
+        console.log(body)
+      }, response => {
+      // error callback
+    })
   }
 }
 </script>
