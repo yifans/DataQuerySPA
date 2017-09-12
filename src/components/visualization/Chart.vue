@@ -13,6 +13,9 @@ export default {
   data: function () {
     return {
       option: {
+        chart: {
+          zoomType: 'xy'
+        },
         yAxis: [],
         title: {
           text: ''

@@ -1,0 +1,8 @@
+- 首页自动刷新
+- status中实时数据获取
+- historical data 中时间选择器与chart的联系
+- 检索中添加树状结构
+- help页面
+- highchart中图形随鼠标缩放
+- 图片中数据下载
+- 时区问题
