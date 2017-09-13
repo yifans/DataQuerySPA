@@ -1,13 +1,12 @@
 <template>
   <div class="chart">
-      <highcharts :options="myOptions" ref="highcharts"></highcharts>
+    <highcharts :options="myOptions" ref="highcharts"></highcharts>
   </div>
 </template>
 
 <script>
 var dateNow = new Date()
 var dateYesterday = new Date(new Date() - 24 * 60 * 60 * 1000)
-
 export default {
   name: 'chart',
   data: function () {
@@ -35,9 +34,16 @@ export default {
     }
   },
   props: {
-    timeRange: {
+    end: {
+      type: Date,
       default: function () {
-        return [dateYesterday, dateNow]
+        return dateNow
+      }
+    },
+    from: {
+      type: Date,
+      default: function () {
+        return dateYesterday
       }
     },
     pvlist: Array
@@ -46,16 +52,26 @@ export default {
     myOptions: function () {
       // get URL
       var urlHead = '/retrieval/data/getData.qw?'
+      var urlFrom = this.from.toISOString()
+      var urlEnd = this.end.toISOString()
       for (var x in this.pvlist) {
-        var urlTmp = urlHead + 'pv=' + this.pvlist[x] + '&'
+        var urlTmp = urlHead + 'pv=' + this.pvlist[x] + '&' +
+                    'from=' + urlFrom + '&' +
+                    'end=' + urlEnd
+        console.log(urlTmp)
         this.$http.get(urlTmp).then(
           response => {
+            var chart = this.$refs.highcharts.chart
+            chart.redraw()
+            console.log('redraw hahah')
+            // get Data
             var body = response.body
             var pvName = body[0].meta.name
             var pvEGU = body[0].meta.EGU
             var pvValue = body[0].data.map(function (val, index, arr) {
               return [val['millis'], val['val']]
             })
+            // set series
             this.option.series.push({
               name: pvName,
               data: pvValue,
@@ -63,12 +79,14 @@ export default {
               animation: false
               // pointInterval: pvValue.length / 5000
             })
+            // set yAxis
             this.option.yAxis.push({
               title: {
                 text: pvEGU
               },
               id: pvName
             })
+            // set xAxis
             this.option.xAxis = {
               title: {
                 text: 'Time'
