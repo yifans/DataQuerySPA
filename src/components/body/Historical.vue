@@ -2,10 +2,11 @@
   <div class="historical">
     <div id='chart'>
       <Row>
-        <Col span='8' >
-          <Tree :data="baseData" show-checkbox></Tree>
+        <Col span='6' offset='2' >
+          <Button type="primary" @click='plot'>Plot</Button>
+          <Tree :data="treeData" show-checkbox></Tree>
         </Col>
-        <Col span='16'>
+        <Col span='14'>
           <my-chart :pvlist='pvlistChart' :from='selectFrom' :end='selectEnd'></my-chart>
         </Col>
       </Row>
@@ -25,6 +26,7 @@
         </Col>
       </Row>
     </div>
+    <br>
   </div>
 </template>
 
@@ -35,7 +37,7 @@ export default {
   name: 'historical',
   data: function () {
     var endDate = new Date()
-    var startDate = new Date(new Date() - 24 * 60 * 60 * 1000)
+    var startDate = new Date(new Date() - 2 * 60 * 60 * 1000)
     return {
       value1: [
         startDate,
@@ -47,28 +49,7 @@ export default {
       selectFrom: startDate,
       selectEnd: endDate,
       dateRange: [],
-      baseData: [{
-        expand: true,
-        title: 'parent 1',
-        children: [{
-          title: 'parent 1-0',
-          expand: true,
-          disabled: true,
-          children: [{
-            title: 'leaf',
-            disableCheckbox: true
-          }, {
-            title: 'leaf'
-          }]
-        }, {
-          title: 'parent 1-1',
-          expand: true,
-          checked: true,
-          children: [{
-            title: '<span style="color: red">leaf</span>'
-          }]
-        }]
-      }]
+      treeData: []
     }
   },
   components: {
@@ -81,14 +62,55 @@ export default {
     handleOk (date) {
       this.selectFrom = new Date(this.dateRange[0])
       this.selectEnd = new Date(this.dateRange[1])
+    },
+    plot () {
+      console.log('plot')
     }
   },
   created: function () {
-    var getAllPvURL = '/bpl/getAllPVs?limit=-1'
+    // var getAllPvURL = '/bpl/getAllPVs?limit=-1'
+    var getAllPvURL = '/allpvs'
+    var pvTree = []
     this.$http.get(getAllPvURL).then(
       response => {
-        var body = response.body
-        console.log(body)
+        var allpvs = response.body
+        console.log(allpvs)
+        for (var pvIndex in allpvs) {
+          var engName = allpvs[pvIndex].eng_name
+          var pvName = allpvs[pvIndex].pv_name
+          // var titleName = allpvs[pvIndex].title
+
+          var systemName = engName.split('@')[0]
+          var showName = engName.split('@')[1]
+          var systemNameString = systemName.split('_')
+
+          var current = pvTree
+          for (var i in systemNameString) {
+            var flag = false
+            for (var j in current) {
+              if (current[j]['title'] === systemNameString[i]) {
+                current = current[j]['children']
+                flag = true
+                break
+              }
+            }
+            if (flag === false) {
+              var obj = {
+                'title': systemNameString[i],
+                'children': []
+              }
+              current.push(obj)
+              current = current[current.length - 1]['children']
+            }
+          }
+          var pvNode = {
+            // text: showName + ' -- ' + pvName,
+            pv: pvName,
+            title: showName + ' -- ' + pvName
+          }
+          current.push(pvNode)
+        }
+        this.treeData = pvTree
       },
       response => {
 
@@ -101,5 +123,8 @@ export default {
 <style>
 #datetime {
   margin:0 auto;
+}
+.ivu-tree {
+  font-size: 4em;
 }
 </style>

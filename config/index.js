@@ -41,6 +41,13 @@ module.exports = {
         pathRewrite: {
           '^/bpl' : ''
         }
+      },
+      '/allpvs' : {
+        target : 'http://localhost:3000/allPVs',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/allpvs' : ''
+        }
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
