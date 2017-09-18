@@ -7,6 +7,7 @@
           </MenuItem>
       </div>
     </Menu>
+    <br>
   </div>
 </template>
 

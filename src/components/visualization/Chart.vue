@@ -58,12 +58,10 @@ export default {
         var urlTmp = urlHead + 'pv=' + this.pvlist[x] + '&' +
                     'from=' + urlFrom + '&' +
                     'end=' + urlEnd
-        console.log(urlTmp)
         this.$http.get(urlTmp).then(
           response => {
-            var chart = this.$refs.highcharts.chart
-            chart.redraw()
-            console.log('redraw hahah')
+            // var chart = this.$refs.highcharts.chart
+            // chart.redraw()
             // get Data
             var body = response.body
             var pvName = body[0].meta.name

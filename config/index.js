@@ -34,6 +34,13 @@ module.exports = {
         pathRewrite: {
           '^/retrieval' : ''
         }
+      },
+      '/bpl' : {
+        target : 'http://192.168.126.22:17665/mgmt/bpl',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/bpl' : ''
+        }
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
