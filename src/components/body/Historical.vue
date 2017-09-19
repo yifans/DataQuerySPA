@@ -4,19 +4,10 @@
       <Row>
         <Col span='6' offset='2' >
           <Button type="primary" @click='plot'>Plot</Button>
-          <Tree :data="treeData" show-checkbox></Tree>
+          <Tree :data="treeData" show-checkbox ref="tree"></Tree>
         </Col>
         <Col span='14'>
           <my-chart :pvlist='pvlistChart' :from='selectFrom' :end='selectEnd'></my-chart>
-        </Col>
-      </Row>
-    </div>
-    <div id="datetime">
-      <Row>
-        <Col span='6' offset='6'>
-          <h2>Start / End time:</h2>
-        </Col>
-        <Col span='6'>
           <DatePicker
           :value="value1"
           type="datetimerange"
@@ -64,7 +55,8 @@ export default {
       this.selectEnd = new Date(this.dateRange[1])
     },
     plot () {
-      console.log('plot')
+      var tmp = this.$refs.tree.getCheckedNodes()
+      console.log(tmp)
     }
   },
   created: function () {
@@ -74,7 +66,6 @@ export default {
     this.$http.get(getAllPvURL).then(
       response => {
         var allpvs = response.body
-        console.log(allpvs)
         for (var pvIndex in allpvs) {
           var engName = allpvs[pvIndex].eng_name
           var pvName = allpvs[pvIndex].pv_name

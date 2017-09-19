@@ -1,9 +1,9 @@
 - 首页自动刷新
 - status中实时数据获取
 - historical data 中时间选择器与chart的联系
-- 检索中添加树状结构
+- tree中选择后和chart关联
 - help页面
-- highchart中图形随鼠标缩放
 - 图片中数据下载
 - 时区问题
 - Channel名字和工程名字如何自动对应，目前只能用配置文件吗？不够好
+- 把chart代码放在method中

@@ -1,12 +1,27 @@
 <template>
   <div class="header">
-    <h1>HLS-II {{title}}</h1>
+    <Row>
+      <Col span='2'offset='4'>
+        <img src="../assets/nsrl_logo.jpg">
+      </Col>
+      <Col span='14'>
+        <h1>HLS-II {{title}}</h1>
+        <h5 id='nowTime'>{{nowTime}}</h5>
+      </Col>
+    </Row>
   </div>
 </template>
 
 <script>
 export default {
   name: 'header',
+  data: function () {
+    var nowTime = new Date().toLocaleString()
+    console.log(nowTime)
+    return {
+      nowTime
+    }
+  },
   computed: {
     title: function () {
       return this.$route.name
