@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import bus from '../../assets/eventBus.js'
 var dateNow = new Date()
 var dateYesterday = new Date(new Date() - 24 * 60 * 60 * 1000)
 export default {
@@ -46,7 +47,10 @@ export default {
         return dateYesterday
       }
     },
-    pvlist: Array
+    pvlist: Array,
+    autoRefresh: {
+      default: false
+    }
   },
   computed: {
     myOptions: function () {
@@ -97,6 +101,24 @@ export default {
       }
       return this.option
     }
+  },
+  methods: {
+    draw: function () {
+      console.log('draw')
+    },
+    redraw: function () {
+      console.log('clean')
+      this.draw()
+    }
+  },
+  watch: {
+
+  },
+  mounted: function () {
+    var vm = this
+    bus.$on('websocketEvent', function () {
+      vm.redraw()
+    })
   }
 }
 </script>

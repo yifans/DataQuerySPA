@@ -7,7 +7,7 @@
           <Tree :data="treeData" show-checkbox ref="tree"></Tree>
         </Col>
         <Col span='14'>
-          <my-chart :pvlist='pvlistChart' :from='selectFrom' :end='selectEnd'></my-chart>
+          <my-chart :pvlist='pvlistChart' :from='selectFrom' :end='selectEnd' :autoRefresh='autoRefresh'></my-chart>
           <DatePicker
           :value="value1"
           type="datetimerange"
@@ -40,7 +40,8 @@ export default {
       selectFrom: startDate,
       selectEnd: endDate,
       dateRange: [],
-      treeData: []
+      treeData: [],
+      autoRefresh: false
     }
   },
   components: {

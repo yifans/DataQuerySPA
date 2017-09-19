@@ -5,28 +5,53 @@
 </template>
 
 <script>
+import bus from '../../assets/eventBus.js'
 var columns1 = [
-  {title: 'pv', key: 'pv'},
-  {title: 'status', key: 'status', align: 'center'}
+  {
+    title: 'PV Name',
+    key: 'pv'
+  },
+  {
+    title: 'Value',
+    key: 'value'
+  }
 ]
 
 export default {
   name: 'table',
   data: function () {
     return {
-      columns1
+      columns1,
+      data1: []
     }
   },
   props: [
     'pvlist'
   ],
-  computed: {
-    data1: function () {
-      var tmp = [
-        {pv: 'beam', status: 200},
-        {pv: 'life', status: 50}
-      ]
-      return tmp
+  methods: {
+    sendEvent: function () {
+      bus.$emit('websocketEvent')
+    }
+  },
+  mounted: function () {
+    var vm = this
+    var ws = new WebSocket('ws://localhost:7890/')
+    ws.onopen = function () {
+      ws.send(vm.pvlist)
+    }
+    ws.onmessage = function (event) {
+      var rec = JSON.parse(event.data)
+      console.log(rec)
+      var data1Tmp = []
+      for (var i in rec) {
+        var item = {
+          pv: rec[i].pvname,
+          value: rec[i].value
+        }
+        data1Tmp.push(item)
+      }
+      vm.data1 = data1Tmp
+      vm.sendEvent()
     }
   }
 }
