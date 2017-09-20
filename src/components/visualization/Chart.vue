@@ -12,26 +12,7 @@ export default {
   name: 'chart',
   data: function () {
     return {
-      option: {
-        chart: {
-          zoomType: 'xy'
-        },
-        yAxis: [],
-        title: {
-          text: ''
-        },
-        series: [],
-        credits: {
-          // enabled:true,                    // 默认值，如果想去掉版权信息，设置为false即可
-          text: 'NSRL@USTC',             // 显示的文字
-          href: 'http://www.nsrl.ustc.edu.cn'
-        },
-        animation: false, // 关闭动画
-        legend: {
-          layout: 'vertical',
-          align: 'right'
-        }
-      }
+      myOptions: {}
     }
   },
   props: {
@@ -52,72 +33,71 @@ export default {
       default: false
     }
   },
-  computed: {
-    myOptions: function () {
+  methods: {
+    draw: function () {
+      var chart = this.$refs.highcharts.chart
+      // remove old series
+      for (var s in chart.series) {
+        chart.series[s].remove()
+      }
+      chart.credits.update({
+        // enabled: true,              // 默认值，如果想去掉版权信息，设置为false即可
+        text: 'NSRL@USTC',             // 显示的文字
+        href: 'http://www.nsrl.ustc.edu.cn'
+      })
+
+      chart.xAxis[0].update({
+        title: {
+          text: 'Time'
+        },
+        type: 'datetime'
+      })
       // get URL
       var urlHead = '/retrieval/data/getData.qw?'
       var urlFrom = this.from.toISOString()
       var urlEnd = this.end.toISOString()
-      for (var x in this.pvlist) {
-        var urlTmp = urlHead + 'pv=' + this.pvlist[x] + '&' +
+      // var seriesGet = []
+      for (var p in this.pvlist) {
+        var urlTmp = urlHead + 'pv=' + this.pvlist[p] + '&' +
                     'from=' + urlFrom + '&' +
                     'end=' + urlEnd
         this.$http.get(urlTmp).then(
-          response => {
-            // var chart = this.$refs.highcharts.chart
-            // chart.redraw()
-            // get Data
+          function (response) {
             var body = response.body
             var pvName = body[0].meta.name
             var pvEGU = body[0].meta.EGU
             var pvValue = body[0].data.map(function (val, index, arr) {
               return [val['millis'], val['val']]
             })
-            // set series
-            this.option.series.push({
-              name: pvName,
-              data: pvValue,
-              yAxis: pvName,
-              animation: false
-              // pointInterval: pvValue.length / 5000
-            })
-            // set yAxis
-            this.option.yAxis.push({
+            chart.addAxis({
               title: {
                 text: pvEGU
               },
               id: pvName
             })
-            // set xAxis
-            this.option.xAxis = {
-              title: {
-                text: 'Time'
-              },
-              type: 'datetime'
-            }
-          }, response => {
-            // error callback
+            chart.addSeries({
+              name: pvName,
+              data: pvValue,
+              // yAxis: pvName,
+              animation: false
+              // pointInterval: pvValue.length / 5000
+            })
+            // chart.yAxis[pvName].update({
+            //   title: {
+            //     text: pvEGU
+            //   }
+            // })
+          }, function (response) {
+
         })
       }
-      return this.option
     }
-  },
-  methods: {
-    draw: function () {
-      console.log('draw')
-    },
-    redraw: function () {
-      console.log('clean')
-      this.draw()
-    }
-  },
-  watch: {
-
   },
   mounted: function () {
     var vm = this
+    vm.draw()
     bus.$on('websocketEvent', function () {
-      vm.redraw()
+      vm.draw()
     })
   }
 }

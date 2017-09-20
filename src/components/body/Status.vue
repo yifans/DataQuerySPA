@@ -31,8 +31,7 @@ export default {
         'RNG:BEAM:LIFE'
       ],
       pvlistChart: [
-        'RNG:BEAM:CURR',
-        'RNG:BEAM:LIFE'
+        'RNG:BEAM:CURR'
       ]
     }
   },
