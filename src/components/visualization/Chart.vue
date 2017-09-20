@@ -7,7 +7,30 @@
 <script>
 import bus from '../../assets/eventBus.js'
 var dateNow = new Date()
-var dateYesterday = new Date(new Date() - 24 * 60 * 60 * 1000)
+var dateHourAgo = new Date(new Date() - 60 * 60 * 1000)
+// var dateYesterday = new Date(new Date() - 24 * 60 * 60 * 1000)
+var initOption = {
+  chart: {
+    zoomType: 'xy'
+  },
+  credits: {
+    // enabled:true,                    // 默认值，如果想去掉版权信息，设置为false即可
+    text: 'NSRL@USTC',             // 显示的文字
+    href: 'http://www.nsrl.ustc.edu.cn'
+  },
+  series: [],
+  animation: false, // 关闭动画
+  legend: {
+    layout: 'vertical',
+    align: 'right'
+  },
+  xAxis: {
+    title: {
+      text: 'Time'
+    },
+    type: 'datetime'
+  }
+}
 export default {
   name: 'chart',
   data: function () {
@@ -25,7 +48,7 @@ export default {
     from: {
       type: Date,
       default: function () {
-        return dateYesterday
+        return dateHourAgo
       }
     },
     pvlist: Array,
@@ -36,31 +59,24 @@ export default {
   methods: {
     draw: function () {
       var chart = this.$refs.highcharts.chart
+      chart.update(initOption)
       // remove old series
       for (var s in chart.series) {
         chart.series[s].remove()
       }
-      chart.credits.update({
-        // enabled: true,              // 默认值，如果想去掉版权信息，设置为false即可
-        text: 'NSRL@USTC',             // 显示的文字
-        href: 'http://www.nsrl.ustc.edu.cn'
-      })
-
-      chart.xAxis[0].update({
-        title: {
-          text: 'Time'
-        },
-        type: 'datetime'
-      })
+      for (var x in chart.yAxis) {
+        chart.yAxis[x].remove()
+      }
       // get URL
       var urlHead = '/retrieval/data/getData.qw?'
       var urlFrom = this.from.toISOString()
       var urlEnd = this.end.toISOString()
       // var seriesGet = []
+      console.log(this.pvlist)
       for (var p in this.pvlist) {
         var urlTmp = urlHead + 'pv=' + this.pvlist[p] + '&' +
-                    'from=' + urlFrom + '&' +
-                    'end=' + urlEnd
+        'from=' + urlFrom + '&' +
+        'end=' + urlEnd
         this.$http.get(urlTmp).then(
           function (response) {
             var body = response.body
@@ -78,15 +94,10 @@ export default {
             chart.addSeries({
               name: pvName,
               data: pvValue,
-              // yAxis: pvName,
+              yAxis: pvName,
               animation: false
               // pointInterval: pvValue.length / 5000
             })
-            // chart.yAxis[pvName].update({
-            //   title: {
-            //     text: pvEGU
-            //   }
-            // })
           }, function (response) {
 
         })
